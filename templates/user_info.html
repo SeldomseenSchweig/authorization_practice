@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+
+{% block title %} User Info {% endblock %}
+
+
+
+
+{%block content %}
+<div class="container">
+<h1 >User Info </h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Username</dt>
+    <dd class="col-sm-9"> {{user.username}} </dd>
+  
+    <dt class="col-sm-3">First Name </dt>
+    <dd class="col-sm-9">
+      {{user.first_name}}
+    </dd>
+  
+    <dt class="col-sm-3">Last Name </dt>
+    <dd class="col-sm-9">{{user.last_name}}</dd>
+  
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9"> {{user.email}}</dd>
+
+    <dt class="col-sm-3">Delete Account</dt>
+    <dd class="col-sm-9">
+        <form action="/users/{{user.username}}/delete" style="display:inline;" method="post" >
+            
+        <button class="btn btn-small btn-danger">x</button>
+    </form> </dd>
+
+  
+</div>
+
+{% for feed in feedback %}
+            <div class="card my-4">
+                {% if session['user_id'] == feed.user_username %}
+                    <div class="card-body">
+                    <h5 class="card-title text-info">{{feed.title}}</h5>
+                    <p class="card-text">
+                        {{feed.content}}
+                        <form action="/feedback/{{feed.id}}/delete " style="display:inline ;" method="post">
+                            <button class="btn btn-small btn-danger">x</button>
+                        </form>
+                        <a href="/feedback/{{feed.id}}/update">Update Feedback</a>
+                        {% endif %}
+                    </p>
+
+
+                    </div> 
+            </div>
+{% endfor %}
+
+
+
+
+
+{% endblock %}

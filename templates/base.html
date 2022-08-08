@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+
+</head>
+<body>
+
+              {% if session['user_id'] %}
+              <nav class="navbar navbar-light bg-primary justify-content-between ">
+                <div class="container">
+                  <a href="/users/{{session['user_id']}}" class="navbar-brand text-light">FeedBack</a>
+                  <ul class="nav navbar-nav flex-row float-right">
+              <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/secret">Secret</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/users/{{session['user_id']}}/feedback/add">Give Feedback</a>
+              </li>
+              {% else %}
+              <body>
+                <nav class="navbar navbar-light bg-primary justify-content-between ">
+                  <div class="container">
+                    <a href="/" class="navbar-brand text-light">FeedBack</a>
+                    <ul class="nav navbar-nav flex-row float-right">
+              <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="/register">Sign up</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
+        <div class="container" style="margin-top: 2em">
+            {% for category, msg in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{category}}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+    {% block content %} 
+    
+    {% endblock %}
+    
+</body>
+</html>
