@@ -4,12 +4,15 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, Feedback
 from forms import RegisterForm, LoginForm, FeedbackForm
 from sqlalchemy.exc import IntegrityError
+import os
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///flask_feedback"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "abc123"
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY','hellosecret1')
+print('******************************')
+print(app.config["SECRET_KEY"])
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 
@@ -31,6 +34,7 @@ def register_form() :
     This form should accept a username, password, email, first_name, and last_name.
     """
     form = RegisterForm()
+        
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -71,8 +75,6 @@ def login_form():
     else:
         form.username.errors = ['Invalid username/password.']
 
-
-
     return(render_template('login_form.html', form=form)) 
 
 
@@ -94,6 +96,7 @@ def user_info(username):
     if 'user_id' not in session and username != session['user_id']:
         flash('You are not authorized for this page', "danger")
         return redirect(f'/users/{username}')
+
     feedback = Feedback.query.filter_by(user_username=username).all()
     u = User.query.get_or_404(username)
     return render_template('user_info.html', user = u, feedback=feedback)
